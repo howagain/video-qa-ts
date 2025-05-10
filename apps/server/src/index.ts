@@ -9,6 +9,7 @@ import { logger } from "hono/logger";
 import { streamText } from "ai";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { stream } from "hono/streaming";
+import { serve } from "@hono/node-server";
 
 const app = new Hono();
 
@@ -87,5 +88,15 @@ app.post("/ai", async (c) => {
 app.get("/", (c) => {
   return c.text("OK");
 });
+
+serve(
+  {
+    fetch: app.fetch,
+    port: 3000,
+  },
+  (info) => {
+    console.log(`Server is running on http://localhost:${info.port}`);
+  }
+);
 
 export default app;
