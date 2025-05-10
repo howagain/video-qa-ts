@@ -1,13 +1,38 @@
 {
-  "name": "my-app",
+  "name": "server",
+  "main": "src/index.ts",
+  "type": "module",
   "scripts": {
+    "build": "tsc && tsc-alias",
+    "check-types": "tsc --noEmit",
+    "compile": "bun build --compile --minify --sourcemap --bytecode ./src/index.ts --outfile server",
+    "dev": "bun run --hot src/index.ts",
     "start": "vercel dev",
-    "deploy": "vercel"
+    "deploy": "vercel",
+    "db:local": "turso dev --db-file local.db",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
-    "hono": "^4.7.9"
+    "@ai-sdk/google": "^1.2.3",
+    "@hono/node-server": "^1.14.1",
+    "@libsql/client": "^0.14.0",
+    "@orpc/client": "^1.2.0",
+    "@orpc/server": "^1.2.0",
+    "ai": "^4.2.8",
+    "better-auth": "^1.2.7",
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.38.4",
+    "hono": "^4.7.9",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
+    "tsc-alias": "^1.8.11",
+    "typescript": "^5.8.2",
+    "@types/bun": "^1.2.6",
+    "drizzle-kit": "^0.30.5",
     "vercel": "^32.4.1"
   }
 }
