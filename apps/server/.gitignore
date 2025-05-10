@@ -51,3 +51,4 @@ lerna-debug.log*
 next-env.d.ts
 
 .vercel
+.turbo
