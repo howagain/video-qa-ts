@@ -7,7 +7,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { streamText } from "ai";
-import { google } from "@ai-sdk/google";
+import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { stream } from "hono/streaming";
 
 const app = new Hono();
@@ -38,20 +38,50 @@ app.use("/rpc/*", async (c, next) => {
   await next();
 });
 
+// Initialize OpenRouter
+const openrouter = createOpenRouter({
+  apiKey: process.env.OPENROUTER_API_KEY || "",
+  // Optional: Add headers for OpenRouter analytics
+  // headers: {
+  //   'HTTP-Referer': process.env.OPENROUTER_SITE_URL,
+  //   'X-Title': process.env.OPENROUTER_SITE_NAME,
+  // }
+});
 
 app.post("/ai", async (c) => {
-  const body = await c.req.json();
-  const messages = body.messages || [];
+  try {
+    const body = await c.req.json();
+    const messages = body.messages || [];
+    console.log("Request body for /ai:", body);
 
-  const result = streamText({
-    model: google("gemini-1.5-flash"),
-    messages,
-  });
+    if (!process.env.OPENROUTER_API_KEY) {
+      console.error("OPENROUTER_API_KEY is not set.");
+      return c.json({ error: "AI provider not configured." }, 500);
+    }
 
-  c.header("X-Vercel-AI-Data-Stream", "v1");
-  c.header("Content-Type", "text/plain; charset=utf-8");
+    const result = streamText({
+      model: openrouter("openai/gpt-4o"), // Using OpenRouter with a default model
+      messages,
+    });
 
-  return stream(c, (stream) => stream.pipe(result.toDataStream()));
+    c.header("X-Vercel-AI-Data-Stream", "v1");
+    c.header("Content-Type", "text/plain; charset=utf-8");
+
+    return stream(c, async (stream) => {
+      try {
+        await stream.pipe(result.toDataStream());
+      } catch (error) {
+        console.error("Error streaming AI response from OpenRouter:", error);
+        // stream.write("Error: Could not stream AI response."); // Optionally send an error message in the stream
+      }
+    });
+  } catch (error) {
+    console.error("Error in /ai endpoint (OpenRouter):", error);
+    return c.json(
+      { error: "Failed to process AI request with OpenRouter" },
+      500
+    );
+  }
 });
 
 app.get("/", (c) => {

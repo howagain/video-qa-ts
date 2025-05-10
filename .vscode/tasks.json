@@ -1,0 +1,41 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Database (video-qa)",
+      "type": "shell",
+      "command": "bun run dev:db-start",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "group": "devEnvGroup",
+        "panel": "dedicated",
+        "reveal": "always",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "Start App Servers (video-qa)",
+      "type": "shell",
+      "command": "bun dev",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "group": "devEnvGroup",
+        "panel": "dedicated",
+        "reveal": "always",
+        "showReuseMessage": false
+      }
+    },
+    {
+      "label": "Start Full Dev Env (VSCode Tasks)",
+      "dependsOrder": "parallel",
+      "dependsOn": [
+        "Start Database (video-qa)",
+        "Start App Servers (video-qa)"
+      ],
+      "problemMatcher": []
+      // "runOptions": { "runOn": "folderOpen" }
+    }
+  ]
+}
