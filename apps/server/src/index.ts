@@ -9,7 +9,6 @@ import { logger } from "hono/logger";
 import { streamText } from "ai";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { stream } from "hono/streaming";
-import { handle } from "@hono/node-server/vercel";
 
 const app = new Hono();
 
@@ -89,4 +88,4 @@ app.get("/", (c) => {
   return c.text("OK");
 });
 
-export default handle(app);
+export default app;
