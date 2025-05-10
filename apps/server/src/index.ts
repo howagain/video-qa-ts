@@ -10,6 +10,8 @@ import { streamText } from "ai";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { stream } from "hono/streaming";
 
+export const runtime = "nodejs";
+
 const app = new Hono();
 
 app.use(logger());
