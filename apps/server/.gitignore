@@ -3,6 +3,7 @@ dist/
 /build
 /out/
 
+
 # dev
 .yarn/
 !.yarn/patches
@@ -49,3 +50,7 @@ lerna-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+# Vercel only thing
+/api 
