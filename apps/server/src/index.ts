@@ -42,10 +42,10 @@ app.use("/rpc/*", async (c, next) => {
 const openrouter = createOpenRouter({
   apiKey: process.env.OPENROUTER_API_KEY || "",
   // Optional: Add headers for OpenRouter analytics
-  // headers: {
-  //   'HTTP-Referer': process.env.OPENROUTER_SITE_URL,
-  //   'X-Title': process.env.OPENROUTER_SITE_NAME,
-  // }
+  headers: {
+    "HTTP-Referer": process.env.OPENROUTER_SITE_URL || "",
+    "X-Title": process.env.OPENROUTER_SITE_NAME || "",
+  },
 });
 
 app.post("/ai", async (c) => {
@@ -60,7 +60,7 @@ app.post("/ai", async (c) => {
     }
 
     const result = streamText({
-      model: openrouter("openai/gpt-4o"), // Using OpenRouter with a default model
+      model: openrouter("google/gemini-2.5-flash-preview-04-17"), // Using OpenRouter with a default model
       messages,
     });
 

@@ -2,16 +2,50 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "Start Full Stack and Open URLs",
+      "dependsOrder": "parallel",
+      "dependsOn": [
+        "Start Database (video-qa)",
+        "Start DB Studio (video-qa)",
+        "Start App Servers (video-qa)",
+        "Open Dev URLs"
+      ],
+      "problemMatcher": [],
+      // If you want this task to run on folder open, uncomment the line below
+      "runOptions": { "runOn": "folderOpen" }
+    },
+    {
       "label": "Start Database (video-qa)",
       "type": "shell",
-      "command": "bun run dev:db-start",
+      "command": "cd apps/server && bun db:local",
       "isBackground": true,
       "problemMatcher": [],
       "presentation": {
-        "group": "devEnvGroup",
-        "panel": "dedicated",
+        "group": "dbLocalGroup",
+        "panel": "new",
         "reveal": "always",
-        "showReuseMessage": false
+        "showReuseMessage": false,
+        "clear": true
+      }
+    },
+    {
+      "label": "Start DB Studio (video-qa)",
+      "type": "shell",
+      "command": "bun db:studio",
+      "isBackground": true,
+      "problemMatcher": [],
+      "options": {
+        "shell": {
+          "executable": "/bin/zsh",
+          "args": ["-l", "-i", "-c"]
+        }
+      },
+      "presentation": {
+        "group": "dbStudioGroup",
+        "panel": "new",
+        "reveal": "always",
+        "showReuseMessage": false,
+        "clear": true
       }
     },
     {
@@ -20,22 +54,28 @@
       "command": "bun dev",
       "isBackground": true,
       "problemMatcher": [],
+      "options": {
+        "shell": {
+          "executable": "/bin/zsh",
+          "args": ["-l", "-i", "-c"]
+        }
+      },
       "presentation": {
-        "group": "devEnvGroup",
-        "panel": "dedicated",
+        "group": "appServersGroup",
+        "panel": "new",
         "reveal": "always",
-        "showReuseMessage": false
+        "showReuseMessage": false,
+        "clear": true
       }
     },
     {
-      "label": "Start Full Dev Env (VSCode Tasks)",
-      "dependsOrder": "parallel",
-      "dependsOn": [
-        "Start Database (video-qa)",
-        "Start App Servers (video-qa)"
-      ],
-      "problemMatcher": []
-      // "runOptions": { "runOn": "folderOpen" }
+      "label": "Open Dev URLs",
+      "type": "shell",
+      "command": "open http://localhost:3000 && open http://localhost:3001 && open https://local.drizzle.studio",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "silent"
+      }
     }
   ]
 }
