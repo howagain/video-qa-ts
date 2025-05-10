@@ -10,13 +10,11 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "outDir": "./dist/api",
-    "rootDir": "./src",
+    "outDir": "./dist",
     "types": ["bun"],
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx"
   },
-  "include": ["./src/**/*"],
   "tsc-alias": {
     "resolveFullPaths": true
   }
